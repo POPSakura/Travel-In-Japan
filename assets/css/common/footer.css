@@ -1,0 +1,65 @@
+.footer-container{
+  width: 100%;
+  min-width: 1350px;
+  background-color: rgb(53, 53, 53);
+  height: 100%;
+}
+.footer-in{
+  width: 70%;
+  padding-top: 30px;
+  margin: 0 auto;
+}
+.footer-in dl{
+  list-style: none;
+  margin-left: 30%;
+}
+.footer-in dt{
+  font-size: 14px;
+  color: rgb(196, 196, 196);
+  margin-bottom: 10px;
+}
+.footer-in dd{
+  font-size: 12px;
+  margin-left: 0;
+  padding-bottom: 4px;
+}
+.footer-in dd>span{
+  color: #ffb62f;
+}
+.footer-in dd,dd>a{
+  color: rgb(196, 196, 196);
+}
+.footer-in dd>a:hover,.links>a:hover{
+  color: #ffffff;
+}
+.el-row>.el-col:nth-child(2)>dl>dd>a{
+  padding-right: 10px;
+}
+.el-row>.el-col:nth-child(3)>dl>dd>a{
+  padding-right: 30px;
+}
+.el-row>.el-col:nth-child(3)>dl>dt{
+  padding-left: 35px;
+}
+.top{
+  padding-bottom: 20px;
+  border-bottom: 1px solid #7c7c7c;
+}
+.bottom{
+  padding-top: 30px;
+}
+.links{
+  padding-bottom: 30px;
+  border-bottom: 1px solid #7c7c7c;
+}
+.links>a{
+  font-size: 12px;
+  color:rgb(196, 196, 196);
+  margin: 0 8px;
+}
+.copytype{
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  color:rgb(196, 196, 196);
+}
