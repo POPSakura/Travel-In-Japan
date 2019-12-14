@@ -222,6 +222,7 @@ router.post('/modifyUserData', async (ctx) => {
         city,
         person_sign: sign
       }, { new: true })
+      console.log(result._id)
       ctx.session.passport.user = result
       ctx.body = {
         code: 0,
@@ -331,9 +332,9 @@ router.post('/modifyUserPass', async (ctx) => {
 // 修改头像接口
 router.post('/modifyUserHead', upload.single('file'), async (ctx) => {
   if (ctx.isAuthenticated()) {
-    const path = ctx.req.file.destination.split('/').slice(1, 3).join('/')
-    const rePath = path + ctx.req.file.filename
+    const path = ctx.req.file.destination.split('//').slice(-1)
     const { username } = ctx.session.passport.user
+    const rePath = `/${path}/` + ctx.req.file.filename
     const { head } = await UserModel.findOneAndUpdate({ username }, { head: rePath }, { new: true })
     if (head) {
       ctx.session.passport.user.head = head

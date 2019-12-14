@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  name: 'Swiper',
   props: {
     banner: {
       type: Array

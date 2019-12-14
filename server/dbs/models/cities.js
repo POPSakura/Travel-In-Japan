@@ -1,29 +1,26 @@
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
-const CiSchema = new Schema({
-  id: {
+const CitySchema = new Schema({
+  city_id: { // 城市ID主键
     type: Number,
     required: true,
     unique: true
   },
-  city: {
+  city: { // 城市名
     type: String,
-    minlength: 0,
-    maxlength: 50,
     required: true,
     trim: true
-  }
-})
-const CitySchema = new Schema({
-  id: {
+  },
+  county_id: { // 区县ID外键
     type: Number,
-    min: 1,
-    max: 50,
-    unique: true,
     required: true
   },
-  cities: [CiSchema]
+  introduction: { // 城市介绍
+    type: String,
+    default: '暂无介绍',
+    trim: true
+  }
 })
 
 export default mongoose.model('City', CitySchema)

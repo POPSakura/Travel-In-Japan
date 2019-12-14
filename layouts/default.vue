@@ -15,14 +15,15 @@
 </template>
 
 <script>
-import HomeFooter from '@/components/common/footer/index.vue'
 import OtherHeader from '@/components/common/header/cindex.vue'
+import HomeFooter from '@/components/common/footer/index.vue'
 export default {
   components: {
     HomeFooter,
     OtherHeader
   },
   mounted() {
+    import('@/assets/js/iconfont.js').then(icon => {})
     window.onbeforeunload = function(){
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
@@ -32,6 +33,9 @@ export default {
 </script>
 
 <style>
+.el-main {
+  padding: 0;
+}
 .el-header,.el-footer{
   padding: 0
 }
@@ -49,5 +53,12 @@ body{
 }
 .default-transition-enter-active,.default-transition-leave-active{
   transition: all .5s ease-out;
+}
+.icon {
+  width: 1em; 
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style>

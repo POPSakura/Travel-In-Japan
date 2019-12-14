@@ -3,15 +3,15 @@
     <h5>修改头像</h5>
     <div class="userhead-in">
       <span>当前头像:</span>
-      <img :src="`http://localhost:3000/${$store.state.user.user.head}`" class="avatar">
+      <img :src="`${$store.state.user.user.head}`" class="avatar">
       <span>点击上传头像:</span>
       <el-upload
         class="avatar-uploader"
-        action="http://localhost:3000/user/modifyUserHead"
+        action="http://www.myrb.com:8080/user/modifyUserHead"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="`http://localhost:3000/${imageUrl}`" class="avatar">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </div>

@@ -21,6 +21,7 @@ import Icon from './icon.vue'
 import Navbar from './navbar.vue'
 import User from './user.vue'
 export default {
+  name: 'CIndex',
   components: {
     Icon,
     Navbar,

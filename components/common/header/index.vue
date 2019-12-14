@@ -46,18 +46,16 @@ export default {
   },
   data: function() {
     return {
-      banner: [
-        '/banner/banner1.jpg',
-        '/banner/banner2.jpg',
-        '/banner/banner3.jpg',
-        '/banner/banner4.jpg',
-        '/banner/banner5.jpg',
-        '/banner/banner6.jpg'
-      ]
+      banner: []
     }
   },
   mounted: function() {
     window.addEventListener('scroll',this.handleScroll)
+    this.$axios.get('/banner').then(({ data }) => {
+      this.banner = data
+        .match(/href="\w+.\w+"/g)
+        .map(n => `/banner/${n.split('=')[1].replace(/"/g, '')}`)
+    })
   },
   methods: {
     handleScroll: function() {

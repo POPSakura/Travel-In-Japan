@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     unique: true,
     required: true,
     minlength: 5,
-    maxlength: 25
+    maxlength: 200
   },
   password: {
     type: String,
@@ -39,7 +39,7 @@ const UserSchema = new Schema({
   },
   head: {
     type: String,
-    default: '/heads/pic1.jpg'
+    default: '/head/pic1.jpg'
   },
   tel: {
     type: Number,

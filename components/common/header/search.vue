@@ -4,7 +4,7 @@
       <span class="position-in" onselectstart="return false">奈良印象</span>
     </div>
     <span class="el-icon-search" onselectstart="return false">&nbsp;选择县区&nbsp;</span>
-    <el-select v-model="countyValue" placeholder="请选择所属县">
+    <el-select v-model="county" placeholder="请选择所属县">
       <el-option-group
       v-for="group in counties"
       :key="group.label"
@@ -17,7 +17,7 @@
         </el-option>
       </el-option-group>
     </el-select>
-    <el-select v-model="cityValue" placeholder="请选择所属市" :disabled="!countyValue.toString().length">
+    <el-select v-model="city" placeholder="请选择所属市" :disabled="!county.toString().length">
       <el-option
         v-for="item in cities"
         :key="item.value"
@@ -25,67 +25,95 @@
         :value="item.value">
       </el-option>
     </el-select>
+    <el-button type="primary" @click="handleClick">Go!</el-button>
     <span class="el-icon-search" onselectstart="return false">&nbsp;关键字查找&nbsp;</span>
-    <el-autocomplete
-      v-model="city"
-      :fetch-suggestions="querySearchAsync"
+    <el-select
+      v-model="selectedCity"
+      filterable
+      remote
       placeholder="请输入区县"
-      @select="handleSelect"
-    ></el-autocomplete>
+      :remote-method="remoteMethod"
+      :loading="loading">
+      <el-option
+        v-for="item in allCities"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
 export default {
+  name: 'Search',
   data: function() {
     return {
-      cityValue: '',
-      countyValue: '',
+      loading: false,
       city: '',
+      county: '',
+      selectedCity: '',
       counties: [],
       cities: [],
       allCities: []
     }
   },
   watch: {
-    async countyValue(newValue) {
+    async county(newValue) {
       const self = this
       const {status, data:{code, cities}} = await self.$axios.get(`/geo/getCities/${newValue}`)
       if(status === 200){
         if(code === 0){
-          self.cities = cities
+          self.cities = cities.map(city => {
+            return {
+              value: city.city_id,
+              label: city.city_name
+            }
+          })
         }else{
           self.cities = cities
         }
       }else{
         self.cities = []
       }
+    },
+    selectedCity(newValue) {
+      this.$router.push({ name: 'area-id', params: { id: newValue} }) 
     }
   },
   methods: {
-    querySearchAsync:_.debounce(async function(query, cb){
-      const self = this
-      if(self.allCities.length){
-        cb(self.allCities.filter(item => item.value.indexOf(query)>-1))
-      }else{
-        const {status, data:{code, allCities}} = await self.$axios.get('/geo/getAllCities')
+    remoteMethod: _.debounce(async function(query) {
+      if (query !== '') {
+        this.loading = true
+        const {status, data:{code, all_cities}} = await this.$axios.get('/geo/getAllCities')
+        this.loading = false
         if(status === 200){
           if(code === 0){
-            self.allCities = allCities
-            cb(self.allCities.filter(item => item.value.indexOf(query)>-1))
-          }else{
-            self.allCities = allCities
-            cb()
+            this.allCities = all_cities
+              .filter(city => city.city_name.indexOf(query) > -1)
+              .map(city => {
+                return {
+                  value: city.city_id,
+                  label: city.city_name
+                }
+              })
+          } else {
+            this.allCities = []
           }
-        }else{
-          self.allCities = []
-          cb()
+        } else {
+          this.allCities = []
         }
+      } else {
+        this.allCities = []
       }
-    },500),
-    handleSelect(item) {
-      
+    }, 500),
+    handleClick() {
+      const { county, city } = this
+      if (county === '' && city === '') return
+      city === '' 
+        ? this.$router.push({ path: '/area', query: { id: this.county } })
+        : this.$router.push({ name: 'area-id', params: { id: this.city} }) 
     }
   },
   async mounted() {
@@ -94,22 +122,22 @@ export default {
     if(status === 200){
       if(code === 0){
         let [cou, loc] = [[], []]
-        counties.forEach((item) => {
-          if(!loc.includes(item.local)){
-            loc.push(item.local)
+        counties.forEach((county) => {
+          if(!loc.includes(county.local)){
+            loc.push(county.local)
             cou.push({
-              label: item.local,
+              label: county.local,
               options: [{
-                value: item.id,
-                label: item.county
+                value: county.county_id,
+                label: county.county_name
               }]
             })
           }else{
             cou.forEach((ite) => {
-              if(ite.label === item.local){
+              if(ite.label === county.local){
                 ite.options.push({
-                  value: item.id,
-                  label: item.county
+                  value: county.county_id,
+                  label: county.county_name
                 })
               }
             })

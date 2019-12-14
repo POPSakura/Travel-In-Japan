@@ -2,7 +2,7 @@
   <div class="user-box">
     <template v-if="$store.state.user.user.username">
       <div v-on:mouseover="listShow" v-on:mouseleave="listHide">
-        <img :src="`http://localhost:3000/${$store.state.user.user.head}`" alt="">
+        <img :src="`${$store.state.user.user.head}`" alt="">
         <span>{{$store.state.user.user.username}}</span>
         <i class="el-icon-arrow-down" style="margin-left: 5px"></i>
       </div>
@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  name: 'User',
   data: function() {
     return {
       flag: false

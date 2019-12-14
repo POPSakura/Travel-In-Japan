@@ -6,6 +6,7 @@ module.exports = {
   /*
   ** Headers of the page
   */
+
   head: {
     title: pkg.name,
     meta: [
@@ -15,6 +16,11 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      // { rel: 'stylesheep', href: 'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css' }
+    ],
+    script: [
+      { src: 'http://api.map.baidu.com/api?v=3.0&ak=ebjxadAVx6R3Y7SCBPakE8E6uNThLA84' }
+      // { src: 'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js' }
     ]
   },
 
@@ -44,20 +50,44 @@ module.exports = {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
+    // 统一基础 URL，线上环境关闭代理使用他
+    // baseURL: 'http://localhost:3000',
+    // 是否开启代理
+    proxy: true
+    // 请求 URL添加前缀
+    // prefix: '/api'
+    // 跨域请求时是否需要使用凭证
+    // credentials: true
     // See https://github.com/nuxt-community/axios-module#options
   },
+
+  // proxy: {
+  //   '/api': {
+  //     // 目标接口域名
+  //     target: 'http://localhost:8080',
+  //     pathRewrite: {
+  //       // 重写路径
+  //       '^/api': '/',
+  //       // 表示是否跨域
+  //       changeOrigin: true
+  //     }
+  //   }
+  // },
 
   /*
   ** Build configuration
   */
   build: {
     transpile: [/^element-ui/],
+    // 防止多次打包
+    vendor: ['element-ui', 'axios']
 
     /*
     ** You can extend webpack config here

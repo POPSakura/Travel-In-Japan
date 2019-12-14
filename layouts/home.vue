@@ -1,5 +1,5 @@
 <template>
-  <transition name="default-transition" appear>
+  <transition name="home-transition" appear>
     <el-container>
       <el-header height="500px">
         <home-header></home-header>
@@ -42,10 +42,10 @@ body{
 .body-margin{
   margin-top: 30px;
 }
-.default-transition-enter,.default-transition-leave-to{
+.home-transition-enter,.home-transition-leave-to{
   opacity: 0;
 }
-.default-transition-enter-active,.default-transition-leave-active{
+.home-transition-enter-active,.home-transition-leave-active{
   transition: all .5s ease-out;
 }
 </style>
