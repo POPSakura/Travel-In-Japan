@@ -1,13 +1,23 @@
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
-const PlaceSchema = new Schema({
-  place_id: { // 景点ID主键
+const RoomSchema = new Schema({
+  kind: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+})
+const HotelSchema = new Schema({
+  hotel_id: { // 酒店ID主键
     type: Number,
     required: true,
     unique: true
   },
-  place: { // 景点名
+  hotel: { // 酒店名
     type: String,
     required: true,
     trim: true
@@ -24,67 +34,59 @@ const PlaceSchema = new Schema({
     type: Number,
     default: 0
   },
-  top: { // 是否为 top 景点
+  top: { // 是否为 top 酒店
     type: Number,
     default: 0
   },
-  hot: { // 是否为热门景点
+  hot: { // 是否为热门酒店
     type: Boolean,
     default: false
   },
-  english_place: { // 景点英文名
+  english_hotel: { // 酒店英文名
     type: String,
     required: true,
     trim: true
   },
-  introduction: { // 景点介绍
+  introduction: { // 酒店介绍
     type: String,
     default: '暂无介绍',
     trim: true
   },
-  image: { // 景点图片
+  image: { // 酒店图片
     type: [String],
     default: []
   },
-  concerns: { // 景点关注点
+  concerns: { // 酒店关注点
     type: [String],
     required: true
   },
-  telephone: { // 景点电话
-    type: String,
-    required: true
-  },
-  website: { // 景点网址
-    type: String,
-    required: true,
-    trim: true
-  },
-  visit_time: { // 景点用时参考
-    type: String,
-    required: true,
-    trim: true
-  },
-  comment_count: { // 景点评论条数
+  comment_count: { // 酒店评论条数
     type: Number,
     default: 0
   },
-  traffic: { // 交通列表
-    type: [String],
-    required: true
+  product_count: { // 酒店销量条数
+    type: Number,
+    default: 0
   },
-  ticket: { // 门票列表
-    type: [String],
-    required: true
+  grade: { // 酒店评分数
+    type: Number,
+    default: 0
   },
-  open_time: { // 开放时间
-    type: [String],
-    required: true
+  brand: {
+    type: String,
+    default: '',
+    trim: true
   },
-  inside_place: {
-    type: [Number],
+  facility: {
+    type: [String],
     default: []
   },
-  location: {
+  kind: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  address: {
     type: String,
     required: true,
     trim: true
@@ -97,7 +99,27 @@ const PlaceSchema = new Schema({
     type: Number,
     required: true
   },
+  room: {
+    type: [RoomSchema],
+    default: []
+  },
+  enter_time: {
+    type: String,
+    required: true
+  },
+  leave_time: {
+    type: String,
+    required: true
+  },
+  room_count: {
+    type: Number,
+    required: true
+  },
   nearby_place: {
+    type: [Number],
+    default: []
+  },
+  nearby_hotel: {
     type: [Number],
     default: []
   },
@@ -107,4 +129,4 @@ const PlaceSchema = new Schema({
   }
 })
 
-export default mongoose.model('Place', PlaceSchema)
+export default mongoose.model('Hotel', HotelSchema)

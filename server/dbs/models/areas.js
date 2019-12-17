@@ -25,9 +25,8 @@ const AreaSchema = new Schema({
     required: true
   },
   introduction: {
-    type: String,
-    default: '暂无介绍',
-    trim: true
+    type: [String],
+    default: []
   },
   latitude: {
     type: Number,

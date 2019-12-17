@@ -26,6 +26,10 @@ export default {
     panToCoordinate: {
       type: Object,
       default: () => {}
+    },
+    panToAreaCoordinate: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -46,11 +50,11 @@ export default {
     mainSiteCoordinate: {
       deep: true,
       handler(value) {
+        this.$Map.clearOverlays()
         const point = new BMap.Point(value.longitude, value.latitude)
         const marker = new BMap.Marker(point, {
-          title: value.place
+          title: value.label
         })
-        this.focusPoint = point
         this.$Map.addOverlay(marker)
         marker.setAnimation(BMAP_ANIMATION_BOUNCE)
       }
@@ -130,6 +134,13 @@ export default {
         const marker = new BMap.Marker(point)
         this.$Map.addOverlay(marker)
       }
+    },
+    panToAreaCoordinate: {
+      deep: true,
+      handler(value) {
+        const point = new BMap.Point(value.longitude, value.latitude)
+        this.$Map.panTo(point)
+      }
     }
   },
   mounted() {
@@ -145,7 +156,6 @@ export default {
     map.addControl(new BMap.OverviewMapControl())  
     map.addControl(new BMap.MapTypeControl())
     // map.setCurrentCity("奈良")
-
     this.$Map = map
   }
 }

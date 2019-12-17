@@ -1,27 +1,6 @@
 <template>
-  <div class="content-top">
-    <div class="top-in">
-      <div>
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item>首页</el-breadcrumb-item>
-          <el-breadcrumb-item>日本</el-breadcrumb-item>
-          <el-breadcrumb-item>奈良</el-breadcrumb-item>
-          <el-breadcrumb-item>奈良市景点</el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
-      <div>
-        <ul>
-          <li v-for="(item, index) of navList" :key="index">
-            <nuxt-link to="">
-              <svg class="icon" aria-hidden="true">
-                <use :xlink:href="`#${item.icon}`"></use>
-              </svg>
-              <span>{{ item.name }}</span>
-            </nuxt-link>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <div class="container">
+    <NavBar></NavBar>
     <div class="content">
       <div class="content-intro">
         <h1>景点概况</h1>
@@ -94,7 +73,7 @@
         <h2>奈良全部景点</h2>
         <div class="all-place-wrapper">
           <ul>
-            <li v-for="(item, index) of allPlaceList" :key="index">
+            <li v-for="(item, index) of placeList" :key="index">
               <nuxt-link :to="{ name: 'place-id', params: { id: item.place_id } }">
                 <img :src="item.image" />
                 <p>{{ item.place }}</p>
@@ -119,43 +98,36 @@
 </template>
 
 <script>
+import NavBar from '@/components/common/NavBar'
+
 export default {
   name: 'TravelScenicSpot',
   data() {
     return {
-      navList: [
-        { name: '概况', icon: 'icon-jieshao' },
-        { name: '行程线路', icon: 'icon-changtubashi' },
-        { name: '景点', icon: 'icon-jingdian' },
-        { name: '酒店', icon: 'icon-jiudian' },
-        { name: '美食', icon: 'icon-canyin' },
-        { name: '景点门票', icon: 'icon-tubiaozhizuomoban-' },
-        { name: '当地游记', icon: 'icon-biji-' },
-        { name: '地图', icon: 'icon-ditu' },
-      ],
-      areaInfo:{},
-      allPlaceList: [],
+      cityID: this.$route.params.id,
+      areaInfo: {},
+      placeList: [],
       isShowDetail: false,
       currentPage: 1,
       pageSize: 10,
       total: 0
     }
   },
+  components: {
+    NavBar
+  },
   methods: {
-    async handleCurrentChange(page) {
-      console.log(page)
-      const result = await this.$axios.get('/geo/getCityOfAllPlace', {
-        params: { 
-          id: this.$route.params.id,
-          pageSize: this.pageSize,
-          currentPage: this.currentPage 
-        }
+    // 获取当前城市的景点
+    async handleCurrentChange() {
+      const { cityID, currentPage, pageSize } = this
+      const { data } = await this.$axios.get('/geo/getPlaceOfCity', {
+        params: { cityID, currentPage, pageSize }
       })
-      if (result.data.code === 0) {
-        this.allPlaceList = result.data.allPlace
-        this.total = result.data.total
+      if (data.code === 0) {
+        this.placeList = data.placeList
+        this.total = data.total
       }
-      else this.$message.error(result.data.msg)
+      else this.$message.error(data.msg)
     },
     mouseEnter(e) {
       e.target.children[0].children[1].style.visibility = 'hidden'
@@ -169,27 +141,21 @@ export default {
     }
   },
   async created() {
+    const { cityID, currentPage, pageSize } = this
     Promise.all([
-      this.$axios.get('/geo/getCityInfo', {params: { id: this.$route.params.id }}),
-      this.$axios.get('/geo/getCityOfAllPlace', {
-        params: { 
-          id: this.$route.params.id,
-          pageSize: this.pageSize,
-          currentPage: this.currentPage 
-        }
+      this.$axios.get('/geo/getCityInfo', { params: { cityID } }),
+      this.$axios.get('/geo/getPlaceOfCity', {
+        params: { cityID, currentPage, pageSize }
       })
     ]).then(([info_one, info_two]) => {
       if (info_one.data.code === 0) this.areaInfo = info_one.data.areaInfo
       else this.$message.error(data.msg)
       if (info_two.data.code === 0) {
-        this.allPlaceList = info_two.data.allPlace
+        this.placeList = info_two.data.placeList
         this.total = info_two.data.total
       }
       else this.$message.error(info_two.data.msg)
     })
-  },
-  mounted() {
-    console.log(this.$route.params.id)
   }
 }
 </script>
@@ -199,41 +165,8 @@ export default {
 
 @border-bottom: 1px solid #E4E4E4;
 
-.content-top {
+.container {
   background-color: #fafafa;
-  .top-in {
-    padding: 1.2em 18em 0.5em;
-    border-bottom: @border-bottom;
-    & > div:nth-child(1) {
-      margin-bottom: 1.5em;
-    }
-    & > div:nth-child(2) {
-      margin-top: 1.5em;
-      ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        li {
-          margin-right: 1.2em;
-          a {
-            display: flex;
-            align-items: center;
-            svg {
-              width: 2.5em;
-              height: 2.5em;
-              margin-right: 0.3em;
-            }
-            span {
-              color: #666666;
-            }
-          }
-          &:hover span {
-            color: #333333;
-          }
-        }
-      }
-    } 
-  }
   .content {
     h1 {
       color: #000000;

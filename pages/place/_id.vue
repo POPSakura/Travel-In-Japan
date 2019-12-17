@@ -15,9 +15,9 @@
         </div>
         <div>
           <div>
-            <a href="#">概况</a>
-            <a href="#">景点评价<span> ({{ placeInfo.comment_count }}条评价) </span></a>
-            <a href="#">热门推荐</a>
+            <a @click="scrollTo('info')">概况</a>
+            <a @click="scrollTo('comment')">景点评价<span> ({{ placeInfo.comment_count }}条评价) </span></a>
+            <a @click="scrollTo('hot')">热门推荐</a>
           </div>
           <el-button type="warning" @click="isShowForm = true">我要点评</el-button>
           <el-dialog :title="placeInfo.place" :visible.sync="isShowForm">
@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="image-wall-wrapper">
+      <div class="image-wall-wrapper" id="info">
         <div class="image-wall">
           <div class="main-img">
             <img :src="placeInfo.main_img" />
@@ -170,7 +170,7 @@
           </div>
         </div>
       </div>
-      <div class="comment-wrapper">
+      <div class="comment-wrapper" id="comment">
         <div class="title">
           <span>景点点评 (共有{{ placeInfo.comment_count }}条真实评价)</span>
         </div>
@@ -244,7 +244,7 @@
         </div>
         <div class="status" v-else>{{ noDataWord }}</div>
       </div>
-      <div class="hot-food">
+      <div class="hot-food" id="hot">
         <div class="title">
           <span>附近热门美食</span>
         </div>
@@ -284,7 +284,9 @@
         </div>
         <ul>
           <li>位于{{ areaInfo.area }}区域， 35%游客选择住在这里。</li>
-          <li>{{ areaInfo.introduction }}</li>
+          <li v-for="(intro, introIndex) of areaInfo.introduction" :key="introIndex">
+            {{ intro }}
+          </li>
         </ul>
         <div class="hotel-container">
           <div class="map">
@@ -294,18 +296,15 @@
             </Map>
           </div>
           <div class="hotel">
-            <div>
-              <img src="http://n1-q.mafengwo.net/s10/M00/C3/7D/wKgBZ1kGE9KAdHgmAAXoarSKUcY59.jpeg?imageMogr2%2Fthumbnail%2F%21340x200r%2Fgravity%2FCenter%2Fcrop%2F%21340x200%2Fquality%2F100" />
+            <nuxt-link
+              v-for="(hotel, hotelIndex) of areaInfo.nearby_hotel" 
+              :key="hotelIndex"
+              :to="{ name: 'hotel-id', params: { id: hotel.hotel_id } }">
+              <img :src="hotel.image" />
               <div class="shadow">
-                <span>The Deer Park Inn</span>
+                <span>{{ hotel.hotel }}</span>
               </div>
-            </div>
-            <div>
-              <img src="http://n1-q.mafengwo.net/s10/M00/C3/7D/wKgBZ1kGE9KAdHgmAAXoarSKUcY59.jpeg?imageMogr2%2Fthumbnail%2F%21340x200r%2Fgravity%2FCenter%2Fcrop%2F%21340x200%2Fquality%2F100" />
-              <div class="shadow">
-                <span>The Deer Park Inn</span>
-              </div>
-            </div>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -361,6 +360,15 @@ export default {
     Map
   },
   methods: {
+    // 锚点平滑移动
+    scrollTo(text) {
+      const dom = document.getElementById(text)
+      const top = dom.offsetTop
+      window.scrollTo({
+        top: top,
+        behavior: 'smooth',
+      })
+    },
     // 取消上传图片
     async handleRemove(file, fileList) {
       const { data } = await this.$axios.post('/comment/removeCommentImage', {
@@ -444,7 +452,7 @@ export default {
       const { placeID } = this
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const { data } = await this.$axios.post('/comment/addComment', Object.assign(this.form, { placeID }))
+          const { data } = await this.$axios.post('/comment/addCommentOfPlace', Object.assign(this.form, { placeID }))
           if (data.code === 0) {
             this.$message({
               message: data.msg,
@@ -563,14 +571,15 @@ export default {
         })
       }
     },
+    // 获取景点信息
     async getPlaceInfo() {
       const { placeID } = this
       const { data } = await this.$axios.get('/geo/getPlaceInfo', {
         params: { placeID }
       })
       this.placeInfo = data.placeInfo
-      const { place, latitude, longitude } = this.placeInfo
-      this.mainSiteCoord = { place, latitude, longitude }
+      const { place: label, latitude, longitude } = this.placeInfo
+      this.mainSiteCoord = { label, latitude, longitude }
       this.centerCoord = { latitude, longitude }
       this.nearbyPlaceCoords = this.placeInfo.nearby_place.map(place => {
         return {
@@ -580,6 +589,7 @@ export default {
         }
       })
     },
+    // 获取区域信息
     async getAreaInfo() {
       const { placeID } = this
       const { data } = await this.$axios.get('/geo/getAreaInfoOfPlace', {
@@ -593,7 +603,7 @@ export default {
       }
     }
   },
-  async created() {
+  created() {
     this.getPlaceInfo()
     this.getAreaInfo()
     this.getComment()
@@ -663,6 +673,7 @@ export default {
         & > div {
           padding: 1.5em 0;
           a {
+            cursor: pointer;
             font-size: 1rem;
             padding: 0 1.5em;
             color: @black;
@@ -1080,11 +1091,11 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          & > div:hover > img {
+          & > a:hover > img {
             transform: scale(1.1);
             transition: transform 2s;
           }
-          & > div {
+          & > a {
             height: 48.5%;
             position: relative;
             overflow: hidden;
