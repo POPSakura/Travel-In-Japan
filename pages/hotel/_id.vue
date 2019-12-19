@@ -105,6 +105,7 @@
               <th>价格来源</th>
               <th>房型</th>
               <th>价格 元/晚</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -112,6 +113,17 @@
               <td>漫游日本</td>
               <td>{{ room.kind }}</td>
               <td>￥{{ room.price }}</td>
+              <td>
+                <el-button 
+                  type="warning" 
+                  size="mini"
+                  @click="$router.push({ path: '/hotel/book/commit', query: { 
+                    id: $route.params.id,
+                    kind: room.kind, 
+                    price: room.price } })">
+                  立即购买
+                </el-button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -751,7 +763,7 @@ p {
       }
     }
     & > div:nth-child(2) {
-      padding: 4em 18em 0;
+      padding: 4em 18em 4em;
       border-bottom: @border-bottom;
       table {
         width: 100%;

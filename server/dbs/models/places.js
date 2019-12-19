@@ -1,6 +1,16 @@
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
+const TicketSchema = new Schema({
+  kind: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+})
 const PlaceSchema = new Schema({
   place_id: { // 景点ID主键
     type: Number,
@@ -73,8 +83,8 @@ const PlaceSchema = new Schema({
     required: true
   },
   ticket: { // 门票列表
-    type: [String],
-    required: true
+    type: [TicketSchema],
+    default: []
   },
   open_time: { // 开放时间
     type: [String],

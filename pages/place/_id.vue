@@ -99,18 +99,42 @@
             </ul>
           </div>
           <div class="info-list">
-            <span>门票</span>
-            <ul>
-              <li v-for="(ticket, ticketIndex) of placeInfo.ticket" :key="ticketIndex">{{ ticket }}</li>
-            </ul>
-          </div>
-          <div class="info-list">
             <span>开放时间</span>
             <ul>
               <li v-for="(open, openIndex) of placeInfo.open_time" :key="openIndex">{{ open }}</li>
             </ul>
           </div>
         </div>
+      </div>
+      <div class="buy-ticket">
+        <table>
+          <thead>
+            <tr>
+              <th>价格来源</th>
+              <th>房型</th>
+              <th>价格 元/晚</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(ticket, ticketIndex) of placeInfo.ticket" :key="ticketIndex">
+              <td>漫游日本</td>
+              <td>{{ ticket.kind }}</td>
+              <td>￥{{ ticket.price }}</td>
+              <td>
+                <el-button 
+                  type="warning" 
+                  size="mini"
+                  @click="$router.push({ path: '/place/book/commit', query: { 
+                    id: $route.params.id,
+                    kind: ticket.kind, 
+                    price: ticket.price } })">
+                  立即购买
+                </el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="geo-wrapper">
         <div class="title">
@@ -762,6 +786,39 @@ export default {
           }
           li {
             color: #666666;
+          }
+        }
+      }
+    }
+    .buy-ticket {
+      padding: 4em 18em 4em;
+      border-bottom: @border-bottom;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid #e5e5e5;
+        thead {
+          tr {
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #cccccc;
+            th {
+              padding: 1em 0;
+            }
+          }
+        }
+        tbody {
+          tr {
+            border-bottom: 1px dashed #e5e5e5;
+            td {
+              text-align: center;
+              padding: 1em 0;
+              &:nth-child(3) {
+                color: @orange;
+                font-weight: bold;
+                font-size: 1.3rem;
+              }
+            }
           }
         }
       }

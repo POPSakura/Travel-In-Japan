@@ -4,6 +4,7 @@ import CityModel from '../dbs/models/cities.js'
 import PlaceModel from '../dbs/models/places.js'
 import AreaModel from '../dbs/models/areas.js'
 import HotelModel from '../dbs/models/hotels.js'
+import LineModel from '../dbs/models/lines.js'
 
 const router = new Router({
   prefix: '/geo'
@@ -366,7 +367,7 @@ router.get('/getHotelOfArea', async (ctx) => {
         hot: hotel.hot,
         top: hotel.top,
         english_hotel: hotel.english_hotel,
-        grade: hotel.grade.toFixed(1),
+        grade: parseFloat(hotel.grade.toFixed(1)),
         comment_count: hotel.comment_count,
         introduction: hotel.introduction,
         area: hotel.area.length ? hotel.area[0].area : '',
@@ -477,6 +478,40 @@ router.get('/getHotelInfo', async (ctx) => {
       concerns: result.concerns,
       brand: result.brand,
       nearby_hotel: nearbyHotel
+    }
+  }
+})
+
+router.get('/getHotelInfoOfBook', async (ctx) => {
+  const { id: hotelID } = ctx.request.query
+  const result = await HotelModel.findOne({ hotel_id: hotelID }, {
+    hotel: 1,
+    image: 1,
+    introduction: 1
+  })
+  ctx.body = {
+    code: 0,
+    hotelInfo: {
+      hotel: result.hotel,
+      image: result.image[0],
+      introduction: result.introduction
+    }
+  }
+})
+
+router.get('/getPlaceInfoOfBook', async (ctx) => {
+  const { id: placeID } = ctx.request.query
+  const result = await PlaceModel.findOne({ place_id: placeID }, {
+    place: 1,
+    image: 1,
+    introduction: 1
+  })
+  ctx.body = {
+    code: 0,
+    placeInfo: {
+      place: result.place,
+      image: result.image[0],
+      introduction: result.introduction
     }
   }
 })

@@ -61,6 +61,7 @@
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 export default {
+  name: 'UserData',
   data: function() {
     return {
       isModify: false,

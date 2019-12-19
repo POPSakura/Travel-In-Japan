@@ -27,6 +27,7 @@
 import _ from 'lodash'
 import CryptoJS from 'crypto-js'
 export default {
+  name: 'ModifyPass',
   data: function() {
     return {
       statusMsg:'',

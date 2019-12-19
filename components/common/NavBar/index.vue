@@ -39,11 +39,10 @@ export default {
     return {
       navList: [
         { label: '概况', icon: 'icon-jieshao', name: 'travel-scenic-spot-id' },
-        { label: '行程线路', icon: 'icon-changtubashi', name: 'travel-scenic-spot-id' },
+        { label: '行程线路', icon: 'icon-changtubashi', name: 'tourist-routes-id' },
         { label: '景点', icon: 'icon-jingdian', name: 'travel-scenic-spot-id' },
         { label: '酒店', icon: 'icon-jiudian', name: 'dwelling-place-id' },
-        { label: '资讯', icon: 'icon-canyin', name: 'travel-scenic-spot-id' },
-        { label: '景点门票', icon: 'icon-tubiaozhizuomoban-', name: 'travel-scenic-spot-id' },
+        { label: '资讯', icon: 'icon-tubiaozhizuomoban-', name: 'travel-information-id' },
         { label: '当地游记', icon: 'icon-biji-', name: 'travel-scenic-spot-id' },
         { label: '地图', icon: 'icon-ditu', name: 'travel-scenic-spot-id' }
       ]

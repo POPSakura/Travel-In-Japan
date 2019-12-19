@@ -213,7 +213,7 @@ export default {
           value: 1,
           label: '升序'
         }, {
-          value: 0,
+          value: -1,
           label: '降序'
         }
       ],

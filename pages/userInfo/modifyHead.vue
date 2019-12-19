@@ -20,6 +20,7 @@
 
 <script>
 export default {
+  name: 'ModifyHead',
   data() {
     return {
       imageUrl: ''

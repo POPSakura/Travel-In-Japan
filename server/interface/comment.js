@@ -65,7 +65,7 @@ router.post('/addCommentOfPlace', async (ctx) => {
     const { placeID, content, grade, images } = ctx.request.body
     const { _id: userID, username, head } = ctx.session.passport.user
     const comment = {
-      comment_id: Math.round((Math.random().toFixed(15)) * Math.pow(10, 16)).toString(),
+      comment_id: Math.round((Math.random().toFixed(16)) * Math.pow(10, 16)).toString(),
       series_id: placeID,
       user_id: userID,
       user: username,
@@ -178,7 +178,7 @@ router.post('/addCommentOfHotel', async (ctx) => {
     const { hotelID, content, grade, images } = ctx.request.body
     const { _id: userID, username, head } = ctx.session.passport.user
     const comment = {
-      comment_id: Math.round((Math.random().toFixed(15)) * Math.pow(10, 16)).toString(),
+      comment_id: Math.round((Math.random().toFixed(16)) * Math.pow(10, 16)).toString(),
       series_id: hotelID,
       user_id: userID,
       user: username,
@@ -308,7 +308,7 @@ router.post('/addReply', async (ctx) => {
       user_id: userID,
       user: username,
       head: head,
-      comment_id: Math.round((Math.random().toFixed(15)) * Math.pow(10, 16)).toString(),
+      comment_id: Math.round((Math.random().toFixed(16)) * Math.pow(10, 16)).toString(),
       content: content,
       superior_id: commentID
     }
