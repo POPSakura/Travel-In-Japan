@@ -30,6 +30,10 @@ export default {
     panToAreaCoordinate: {
       type: Object,
       default: () => {}
+    },
+    lineCoordinates: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -43,7 +47,7 @@ export default {
       deep: true,
       handler(value) {
         const point = new BMap.Point(value.longitude, value.latitude)
-        this.$Map.centerAndZoom(point, 14)
+        this.$Map.centerAndZoom(point, value.scale || 14)
       }
     },
     // 主景点标记
@@ -140,6 +144,27 @@ export default {
       handler(value) {
         const point = new BMap.Point(value.longitude, value.latitude)
         this.$Map.panTo(point)
+      }
+    },
+    lineCoordinates: {
+      deep: true,
+      handler(value) {
+        const points = value.map(item => {
+          const point = new BMap.Point(item.longitude, item.latitude)
+          const label = new BMap.Label(item.name, {
+            position: point
+          })
+          this.$Map.addOverlay(label)
+          label.hide()
+          return point
+        })
+        const curve = new BMapLib.CurveLine(points, {
+          strokeColor:"blue", 
+          strokeWeight:3, 
+          strokeOpacity: 0.5
+        })
+        this.$Map.addOverlay(curve)
+        curve.enableEditing()
       }
     }
   },

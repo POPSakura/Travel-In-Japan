@@ -19,7 +19,8 @@ module.exports = {
       // { rel: 'stylesheep', href: 'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css' }
     ],
     script: [
-      { src: 'http://api.map.baidu.com/api?v=3.0&ak=ebjxadAVx6R3Y7SCBPakE8E6uNThLA84' }
+      { src: 'http://api.map.baidu.com/api?v=3.0&ak=ebjxadAVx6R3Y7SCBPakE8E6uNThLA84' },
+      { src: 'http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js' }
       // { src: 'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js' }
     ]
   },

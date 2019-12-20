@@ -516,4 +516,35 @@ router.get('/getPlaceInfoOfBook', async (ctx) => {
   }
 })
 
+router.get('/getLineOfCity', async (ctx) => {
+  const { cityID } = ctx.request.query
+  const currentPage = parseInt(ctx.request.query.currentPage)
+  const pageSize = parseInt(ctx.request.query.pageSize)
+  const total = await LineModel.countDocuments({ city_id: cityID })
+  const skip = (currentPage - 1) * pageSize
+  const limit = total - skip >= pageSize ? pageSize : total - skip
+  const result = await LineModel.find({ city_id: cityID }).skip(skip).limit(limit)
+  if (result) {
+    ctx.body = {
+      code: 0,
+      lineList: result.map((item) => {
+        return {
+          line: item.line,
+          period: item.period,
+          the_best_season: item.season,
+          point: item.point,
+          tips: item.tips,
+          summary: item.summary
+        }
+      }),
+      total: total
+    }
+  } else {
+    ctx.body = {
+      code: -1,
+      msg: '暂无相关数据！'
+    }
+  }
+})
+
 export default router
