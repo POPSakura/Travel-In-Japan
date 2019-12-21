@@ -9,7 +9,7 @@ const router = new Router({
 router.post('/addOrderOfHotel', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { name, email, telephone, remark, time, hotelID, hotel, kind, price, quantity, total } = ctx.request.body
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const order = {
       order_id: Math.round((Math.random().toFixed(17)) * Math.pow(10, 17)).toString(),
       series_type: 'hotel',
@@ -82,7 +82,7 @@ router.post('/cancelOrderOfHotel', async (ctx) => {
 router.get('/checkHotelOrderStatus', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { id: hotelID } = ctx.request.query
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const result = await OrderModel.find({ series_id: hotelID, user_id: userID, status: 0 })
     if (!result.length) {
       ctx.body = {
@@ -106,7 +106,7 @@ router.get('/checkHotelOrderStatus', async (ctx) => {
 router.post('/addOrderOfPlace', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { name, email, telephone, remark, time, placeID, place, kind, price, quantity, total } = ctx.request.body
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const order = {
       order_id: Math.round((Math.random().toFixed(17)) * Math.pow(10, 17)).toString(),
       series_type: 'place',
@@ -148,7 +148,7 @@ router.post('/addOrderOfPlace', async (ctx) => {
 router.get('/checkPlaceOrderStatus', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { id: placeID } = ctx.request.query
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const result = await OrderModel.find({ series_id: placeID, user_id: userID, status: 0 })
     if (!result.length) {
       ctx.body = {
@@ -255,7 +255,7 @@ router.post('/payOrder', async (ctx) => {
 
 router.get('/getOrder', async (ctx) => {
   if (ctx.isAuthenticated()) {
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const { currentPage, pageSize } = ctx.request.query
     const total = await OrderModel.countDocuments({ user_id: userID })
     const skip = (currentPage - 1) * pageSize

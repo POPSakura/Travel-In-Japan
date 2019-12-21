@@ -435,10 +435,10 @@ export default {
     },
     // 图片上传限制
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
+      const isJPG = file.type === 'image/jpeg' || 'image/jpg' || 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error('上传头像图片只能是 JPG、PNG 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!');
@@ -482,6 +482,7 @@ export default {
               message: data.msg,
               type: 'success'
             })
+            this.getPlaceInfo()
             this.getComment()
           } else if (data.code === -1) {
             this.$message({
@@ -557,7 +558,10 @@ export default {
     },
     // 点赞
     async giveThumbsUp(commentID) {
-      const { data } = await this.$axios.post('/comment/like', { commentID })
+      const { data } = await this.$axios.post('/comment/like', { 
+        commentID,
+        type: 'comment'
+      })
       if (data.code === 0) {
         this.$message({
           message: data.msg,

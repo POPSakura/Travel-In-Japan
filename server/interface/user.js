@@ -1,6 +1,7 @@
 import Router from 'koa-router'
 import Redis from 'koa-redis'
 import nodeMailer from 'nodemailer'
+import mongoose from 'mongoose'
 import UserModel from '../dbs/models/users.js'
 import Email from '../dbs/config.js'
 import passport from './utils/passport.js'
@@ -105,6 +106,7 @@ router.post('/signup', async (ctx) => {
     return false
   }
   const newUser = await UserModel.create({
+    user_id: new mongoose.Types.ObjectId().toHexString(),
     username,
     password,
     email
@@ -222,7 +224,6 @@ router.post('/modifyUserData', async (ctx) => {
         city,
         person_sign: sign
       }, { new: true })
-      console.log(result._id)
       ctx.session.passport.user = result
       ctx.body = {
         code: 0,

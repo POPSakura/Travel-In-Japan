@@ -7,7 +7,7 @@ const LikeSchema = new Schema({
     required: true,
     unique: true
   },
-  comment_id: { // 评论ID外键
+  series_id: { // 评论ID外键
     type: String,
     required: true
   },

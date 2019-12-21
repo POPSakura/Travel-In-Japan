@@ -8,8 +8,7 @@ const CommentSchema = new Schema({
     unique: true
   },
   series_id: { // 被评论系列ID外键 [景点、酒店、美食等]
-    type: Number,
-    required: true
+    type: Number
   },
   user_id: { // 评论用户ID外键
     type: String,

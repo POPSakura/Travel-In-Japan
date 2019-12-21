@@ -1,15 +1,19 @@
 <template>
   <div class="container">
-    <Map 
+    <!-- <Map 
       :centerCoordinate="centerCrood"
       :siteCoordinates="siteCroods"
       :areaCoordinates="areaCroods">
-    </Map>
+    </Map> -->
+    <!-- <Editor></Editor> -->
+    <Echarts></Echarts>
   </div>
 </template>
 
 <script>
 import Map from '@/components/common/map'
+import Editor from '@/components/common/editor'
+import Echarts from '@/components/common/echarts'
 
 export default {
   layout: 'blank',
@@ -173,14 +177,16 @@ export default {
     }
   },
   components: {
-    Map
+    Map,
+    Editor,
+    Echarts
   }
 }
 </script>
 
 <style lang="less">
 .container {
-  height: 500px;
-  width: 1000px;
+  height: 300px;
+  width: 300px;
 }
 </style>

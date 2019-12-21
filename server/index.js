@@ -12,6 +12,7 @@ import geo from './interface/geo.js'
 import comment from './interface/comment.js'
 import order from './interface/order.js'
 import news from './interface/news.js'
+import note from './interface/note.js'
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 
@@ -86,6 +87,7 @@ async function start() {
   app.use(comment.routes()).use(comment.allowedMethods())
   app.use(order.routes()).use(order.allowedMethods())
   app.use(news.routes()).use(news.allowedMethods())
+  app.use(note.routes()).use(note.allowedMethods())
 
   app.use((ctx) => {
     ctx.status = 200

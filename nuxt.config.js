@@ -43,7 +43,11 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/moment'
+    '@/plugins/moment',
+    {
+      src: '@/plugins/vue-quill-editor',
+      ssr: false
+    }
   ],
 
   /*
@@ -88,7 +92,7 @@ module.exports = {
   build: {
     transpile: [/^element-ui/],
     // 防止多次打包
-    vendor: ['element-ui', 'axios']
+    vendor: ['element-ui', 'axios', 'vue-quill-editor']
 
     /*
     ** You can extend webpack config here

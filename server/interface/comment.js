@@ -63,7 +63,7 @@ router.post('/removeCommentImage', async (ctx) => {
 router.post('/addCommentOfPlace', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { placeID, content, grade, images } = ctx.request.body
-    const { _id: userID, username, head } = ctx.session.passport.user
+    const { user_id: userID, username, head } = ctx.session.passport.user
     const comment = {
       comment_id: Math.round((Math.random().toFixed(16)) * Math.pow(10, 16)).toString(),
       series_id: placeID,
@@ -100,7 +100,7 @@ router.post('/addCommentOfPlace', async (ctx) => {
 // 获取当前景点评论接口
 router.get('/getCommentOfPlace', async (ctx) => {
   if (ctx.isAuthenticated()) {
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const placeID = parseInt(ctx.request.query.placeID)
     const currentPage = parseInt(ctx.request.query.currentPage)
     const pageSize = parseInt(ctx.request.query.pageSize)
@@ -121,7 +121,7 @@ router.get('/getCommentOfPlace', async (ctx) => {
         $lookup: {
           from: 'likes',
           localField: 'comment_id',
-          foreignField: 'comment_id',
+          foreignField: 'series_id',
           as: 'likes'
         }
       },
@@ -176,7 +176,7 @@ router.get('/getCommentOfPlace', async (ctx) => {
 router.post('/addCommentOfHotel', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { hotelID, content, grade, images } = ctx.request.body
-    const { _id: userID, username, head } = ctx.session.passport.user
+    const { user_id: userID, username, head } = ctx.session.passport.user
     const comment = {
       comment_id: Math.round((Math.random().toFixed(16)) * Math.pow(10, 16)).toString(),
       series_id: hotelID,
@@ -201,7 +201,6 @@ router.post('/addCommentOfHotel', async (ctx) => {
     ])
     const commentTotal = await CommentModel.countDocuments({ series_id: hotelID })
     const gradeAvg = gradeTotal[0].total / commentTotal
-    console.log(gradeAvg)
     const setCommentCountFlag = await HotelModel.updateOne({
       hotel_id: hotelID
     }, { $inc: { comment_count: 1 }, $set: { grade: gradeAvg } })
@@ -227,7 +226,7 @@ router.post('/addCommentOfHotel', async (ctx) => {
 // 获取当前酒店评论接口
 router.get('/getCommentOfHotel', async (ctx) => {
   if (ctx.isAuthenticated()) {
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const hotelID = parseInt(ctx.request.query.hotelID)
     const currentPage = parseInt(ctx.request.query.currentPage)
     const pageSize = parseInt(ctx.request.query.pageSize)
@@ -248,7 +247,7 @@ router.get('/getCommentOfHotel', async (ctx) => {
         $lookup: {
           from: 'likes',
           localField: 'comment_id',
-          foreignField: 'comment_id',
+          foreignField: 'series_id',
           as: 'likes'
         }
       },
@@ -303,7 +302,7 @@ router.get('/getCommentOfHotel', async (ctx) => {
 router.post('/addReply', async (ctx) => {
   if (ctx.isAuthenticated()) {
     const { commentID, content } = ctx.request.body
-    const { _id: userID, username, head } = ctx.session.passport.user
+    const { user_id: userID, username, head } = ctx.session.passport.user
     const reply = {
       user_id: userID,
       user: username,
@@ -335,15 +334,15 @@ router.post('/addReply', async (ctx) => {
 // 点赞接口
 router.post('/like', async (ctx) => {
   if (ctx.isAuthenticated()) {
-    const { _id: userID } = ctx.session.passport.user
+    const { user_id: userID } = ctx.session.passport.user
     const { commentID } = ctx.request.body
     const result = await LikeModel.findOne({
-      comment_id: commentID,
+      series_id: commentID,
       user_id: userID
     })
     if (result) {
       const setLikeFlag = await LikeModel.updateOne({
-        comment_id: commentID,
+        series_id: commentID,
         user_id: userID
       }, { $set: { status: result.status === 0 ? 1 : 0 } })
       const setLikeCountFlag = await CommentModel.updateOne({
@@ -359,7 +358,7 @@ router.post('/like', async (ctx) => {
     } else {
       const like = {
         like_id: Math.round((Math.random().toFixed(15)) * Math.pow(10, 15)).toString(),
-        comment_id: commentID,
+        series_id: commentID,
         user_id: userID,
         status: 1
       }

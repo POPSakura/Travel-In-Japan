@@ -242,7 +242,7 @@
               <div>
                 {{ item.content }}
               </div>
-              <div>
+              <div v-show="item.images.length">
                 <img v-for="(image, imageIndex) of item.images" :key="imageIndex" :src="image" />
               </div>
               <div>
@@ -537,7 +537,9 @@ export default {
     },
     // 点赞
     async giveThumbsUp(commentID) {
-      const { data } = await this.$axios.post('/comment/like', { commentID })
+      const { data } = await this.$axios.post('/comment/like', { 
+        commentID
+      })
       if (data.code === 0) {
         this.$message({
           message: data.msg,
