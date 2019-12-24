@@ -152,7 +152,8 @@ router.get('/getPlaceOfCity', async (ctx) => {
   const result = await PlaceModel.find({ city_id: cityID }, {
     place: 1,
     place_id: 1,
-    image: 1
+    image: 1,
+    comment_count: 1
   }).skip((currentPage - 1) * pageSize).limit(limit)
   ctx.body = {
     code: 0,
@@ -160,7 +161,8 @@ router.get('/getPlaceOfCity', async (ctx) => {
       return {
         place: item.place,
         place_id: item.place_id,
-        image: item.image[0]
+        image: item.image[0],
+        comment_count: item.comment_count
       }
     }),
     total: total

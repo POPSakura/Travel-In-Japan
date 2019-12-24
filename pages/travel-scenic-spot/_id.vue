@@ -4,6 +4,9 @@
     <div class="content">
       <div class="content-intro">
         <h1>景点概况</h1>
+        <div class="charts">
+          <Echarts :data="computedData"></Echarts>
+        </div>
         <div class="intro-wrapper">
           <p v-if="isShowDetail">{{ areaInfo.city_introduction }}</p>
           <div v-else>
@@ -99,6 +102,7 @@
 
 <script>
 import NavBar from '@/components/common/NavBar'
+import Echarts from '@/components/common/echarts'
 
 export default {
   name: 'TravelScenicSpot',
@@ -114,7 +118,22 @@ export default {
     }
   },
   components: {
-    NavBar
+    NavBar,
+    Echarts
+  },
+  computed: {
+    computedData() {
+      if (this.placeList) {
+        return this.placeList.map(item => {
+          return {
+            value: item.comment_count,
+            name: item.place
+          }
+        })
+      } else {
+        return []
+      }
+    }
   },
   methods: {
     // 获取当前城市的景点
@@ -174,6 +193,14 @@ export default {
     .content-intro {
       padding: 3em 18em 1em;
       border-bottom: @border-bottom;
+      position: relative;
+      .charts {
+        position: absolute;
+        top: -8em;
+        right: 14em;
+        width: 30em;
+        height: 15.5em;
+      }
       .intro-wrapper {
         margin-top: 1.4em;
         font-size: 1rem;

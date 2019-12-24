@@ -47,7 +47,8 @@ module.exports = {
     {
       src: '@/plugins/vue-quill-editor',
       ssr: false
-    }
+    },
+    '~plugins/echarts'
   ],
 
   /*
