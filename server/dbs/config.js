@@ -14,11 +14,11 @@ export default {
   smtp: {
     // 发送邮件主邮箱
     get user() {
-      return '877891171@qq.com'
+      return 'xxxxxxxxx@qq.com'
     },
     // 主邮箱秘钥
     get pass() {
-      return 'dxxnllsgsajhbecj'
+      return 'xxxxxxxxxxxxxx'
     },
     // 邮箱服务主机
     get host() {
